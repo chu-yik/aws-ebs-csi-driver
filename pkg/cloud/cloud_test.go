@@ -82,6 +82,62 @@ func extractVolumeIdentifiers(volumes []types.Volume) (volumeIDs []string, volum
 	}
 	return volumeIDs, volumeNames
 }
+
+func TestNewCloudWithEC2(t *testing.T) {
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+	mockEC2 := NewMockEC2API(mockCtrl)
+
+	testCases := []struct {
+		name            string
+		ec2             EC2API
+		region          string
+		userAgentExtra  string
+		batchingEnabled bool
+		expectError     bool
+	}{
+		{
+			name:            "success: with ec2, region, userAgentExtra, and batchingEnabled",
+			ec2:             mockEC2,
+			region:          "us-east-1",
+			userAgentExtra:  "example_user_agent_extra",
+			batchingEnabled: true,
+		},
+		{
+			name:           "success: with ec2, region, and userAgentExtra",
+			ec2:            mockEC2,
+			region:         "us-east-1",
+			userAgentExtra: "example_user_agent_extra",
+		},
+		{
+			name:   "success: with only ec2 and region",
+			ec2:    mockEC2,
+			region: "us-east-1",
+		},
+		{
+			name:        "fail: if ec2 is nil",
+			ec2:         nil,
+			region:      "us-east-1",
+			expectError: true,
+		},
+	}
+	for _, tc := range testCases {
+		ec2Cloud, err := NewCloudWithEC2(tc.ec2, tc.region, tc.userAgentExtra, tc.batchingEnabled)
+		if tc.expectError {
+			assert.Error(t, err)
+		} else {
+			assert.NoError(t, err)
+			ec2CloudAscloud := ec2Cloud.(*cloud)
+			assert.Equal(t, tc.region, ec2CloudAscloud.region)
+			assert.Equal(t, mockEC2, ec2CloudAscloud.ec2)
+			if tc.batchingEnabled {
+				assert.NotNil(t, ec2CloudAscloud.bm)
+			} else {
+				assert.Nil(t, ec2CloudAscloud.bm)
+			}
+		}
+	}
+}
 func TestNewCloud(t *testing.T) {
 
 	testCases := []struct {

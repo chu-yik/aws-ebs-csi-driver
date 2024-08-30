@@ -333,6 +333,9 @@ var _ Cloud = &cloud{}
 
 // NewCloudWithEC2 returns a new instance of AWS cloud with given EC2API
 func NewCloudWithEC2(ec2 EC2API, region string, userAgentExtra string, batching bool) (Cloud, error) {
+	if ec2 == nil {
+		return nil, errors.New("EC2API cannot be nil")
+	}
 	setAwsExecutionEnvVar(userAgentExtra)
 
 	var bm *batcherManager

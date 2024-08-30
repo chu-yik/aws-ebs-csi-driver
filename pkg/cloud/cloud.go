@@ -331,6 +331,28 @@ type cloud struct {
 
 var _ Cloud = &cloud{}
 
+// NewCloudWithEC2 returns a new instance of AWS cloud with given EC2API
+func NewCloudWithEC2(ec2 EC2API, region string, userAgentExtra string, batching bool) (Cloud, error) {
+	setAwsExecutionEnvVar(userAgentExtra)
+
+	var bm *batcherManager
+	if batching {
+		klog.V(4).InfoS("NewCloudWithEC2: batching enabled")
+		bm = newBatcherManager(ec2)
+	}
+
+	return &cloud{
+		region:               region,
+		dm:                   dm.NewDeviceManager(),
+		ec2:                  ec2,
+		bm:                   bm,
+		rm:                   newRetryManager(),
+		vwp:                  vwp,
+		likelyBadDeviceNames: expiringcache.New[string, sync.Map](cacheForgetDelay),
+		latestClientTokens:   expiringcache.New[string, int](cacheForgetDelay),
+	}, nil
+}
+
 // NewCloud returns a new instance of AWS cloud
 // It panics if session is invalid
 func NewCloud(region string, awsSdkDebugLog bool, userAgentExtra string, batching bool) (Cloud, error) {
@@ -348,12 +370,7 @@ func newEC2Cloud(region string, awsSdkDebugLog bool, userAgentExtra string, batc
 		cfg.ClientLogMode = aws.LogRequestWithBody | aws.LogResponseWithBody
 	}
 
-	// Set the env var so that the session appends custom user agent string
-	if userAgentExtra != "" {
-		os.Setenv("AWS_EXECUTION_ENV", "aws-ebs-csi-driver-"+driverVersion+"-"+userAgentExtra)
-	} else {
-		os.Setenv("AWS_EXECUTION_ENV", "aws-ebs-csi-driver-"+driverVersion)
-	}
+	setAwsExecutionEnvVar(userAgentExtra)
 
 	svc := ec2.NewFromConfig(cfg, func(o *ec2.Options) {
 		o.APIOptions = append(o.APIOptions,
@@ -383,6 +400,16 @@ func newEC2Cloud(region string, awsSdkDebugLog bool, userAgentExtra string, batc
 		vwp:                  vwp,
 		likelyBadDeviceNames: expiringcache.New[string, sync.Map](cacheForgetDelay),
 		latestClientTokens:   expiringcache.New[string, int](cacheForgetDelay),
+	}
+}
+
+// setAwsExecutionEnvVar sets the AWS_EXECUTION_ENV.
+func setAwsExecutionEnvVar(userAgentExtra string) {
+	// Set the env var so that the session appends custom user agent string
+	if userAgentExtra != "" {
+		os.Setenv("AWS_EXECUTION_ENV", "aws-ebs-csi-driver-"+driverVersion+"-"+userAgentExtra)
+	} else {
+		os.Setenv("AWS_EXECUTION_ENV", "aws-ebs-csi-driver-"+driverVersion)
 	}
 }
 

@@ -1,4 +1,4 @@
-module github.com/kubernetes-sigs/aws-ebs-csi-driver
+module github.com/chu-yik/aws-ebs-csi-driver
 
 require (
 	github.com/aws/aws-sdk-go-v2 v1.30.4

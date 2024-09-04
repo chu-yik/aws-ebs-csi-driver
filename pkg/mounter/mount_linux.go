@@ -28,7 +28,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/util"
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/util"
 	"golang.org/x/sys/unix"
 	"k8s.io/klog/v2"
 	mountutils "k8s.io/mount-utils"

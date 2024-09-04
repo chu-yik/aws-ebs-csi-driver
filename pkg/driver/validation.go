@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/cloud"
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/cloud"
 	"k8s.io/klog/v2"
 )
 

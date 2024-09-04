@@ -27,13 +27,13 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/util"
 	disk "github.com/kubernetes-csi/csi-proxy/client/api/disk/v1"
 	fs "github.com/kubernetes-csi/csi-proxy/client/api/filesystem/v1"
 	volume "github.com/kubernetes-csi/csi-proxy/client/api/volume/v1"
 	diskclient "github.com/kubernetes-csi/csi-proxy/client/groups/disk/v1"
 	fsclient "github.com/kubernetes-csi/csi-proxy/client/groups/filesystem/v1"
 	volumeclient "github.com/kubernetes-csi/csi-proxy/client/groups/volume/v1"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/util"
 
 	"k8s.io/klog/v2"
 	mountutils "k8s.io/mount-utils"

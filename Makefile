@@ -20,7 +20,7 @@
 
 VERSION?=v1.34.0
 
-PKG=github.com/kubernetes-sigs/aws-ebs-csi-driver
+PKG=github.com/chu-yik/aws-ebs-csi-driver
 GIT_COMMIT?=$(shell git rev-parse HEAD)
 BUILD_DATE?=$(shell date -u -Iseconds)
 LDFLAGS?="-X ${PKG}/pkg/driver.driverVersion=${VERSION} -X ${PKG}/pkg/cloud.driverVersion=${VERSION} -X ${PKG}/pkg/driver.gitCommit=${GIT_COMMIT} -X ${PKG}/pkg/driver.buildDate=${BUILD_DATE} -s -w"
@@ -79,7 +79,7 @@ test/coverage:
 	rm cover.out filtered_cover.out
 
 # TODO: Re-enable sanity tests
-# sanity tests have been disabled with the removal of NewFakeDriver, which was previously created to instantiate a fake driver utilized for testing. 
+# sanity tests have been disabled with the removal of NewFakeDriver, which was previously created to instantiate a fake driver utilized for testing.
 # to re-enable tests, implement sanity tests creating a new driver instance by injecting mocked dependencies.
 #.PHONY: test-sanity
 #test-sanity:

@@ -19,7 +19,7 @@ package driver
 import (
 	"testing"
 
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/cloud"
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/cloud"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

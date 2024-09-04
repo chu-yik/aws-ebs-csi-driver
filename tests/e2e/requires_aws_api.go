@@ -24,8 +24,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/tests/e2e/driver"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/tests/e2e/testsuites"
+	"github.com/chu-yik/aws-ebs-csi-driver/tests/e2e/driver"
+	"github.com/chu-yik/aws-ebs-csi-driver/tests/e2e/testsuites"
 	"k8s.io/kubernetes/test/e2e/framework"
 
 	volumesnapshotv1 "github.com/kubernetes-csi/external-snapshotter/client/v4/apis/volumesnapshot/v1"
@@ -35,8 +35,8 @@ import (
 	restclientset "k8s.io/client-go/rest"
 	admissionapi "k8s.io/pod-security-admission/api"
 
-	awscloud "github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/cloud"
-	ebscsidriver "github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/driver"
+	awscloud "github.com/chu-yik/aws-ebs-csi-driver/pkg/cloud"
+	ebscsidriver "github.com/chu-yik/aws-ebs-csi-driver/pkg/driver"
 )
 
 const testTagNamePrefix = "testTag"

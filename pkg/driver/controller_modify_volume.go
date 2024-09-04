@@ -26,8 +26,8 @@ import (
 	"time"
 
 	"github.com/awslabs/volume-modifier-for-k8s/pkg/rpc"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/cloud"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/coalescer"
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/cloud"
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/coalescer"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"k8s.io/klog/v2"

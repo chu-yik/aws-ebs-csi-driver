@@ -34,10 +34,10 @@ import (
 
 	"github.com/aws/smithy-go"
 
+	dm "github.com/chu-yik/aws-ebs-csi-driver/pkg/cloud/devicemanager"
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/expiringcache"
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/util"
 	"github.com/golang/mock/gomock"
-	dm "github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/cloud/devicemanager"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/expiringcache"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

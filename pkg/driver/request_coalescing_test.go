@@ -25,13 +25,13 @@ import (
 	"time"
 
 	"github.com/awslabs/volume-modifier-for-k8s/pkg/rpc"
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/driver/internal"
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/util"
 	"github.com/container-storage-interface/spec/lib/go/csi"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/driver/internal"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/util"
 	"k8s.io/klog/v2"
 
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/cloud"
 	"github.com/golang/mock/gomock"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/cloud"
 )
 
 type modifyVolumeExecutor func(ctx context.Context, driver ControllerService, name string, params map[string]string) error

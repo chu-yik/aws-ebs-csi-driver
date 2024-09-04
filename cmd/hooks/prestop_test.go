@@ -18,8 +18,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/driver"
 	"github.com/golang/mock/gomock"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/driver"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	v1 "k8s.io/api/core/v1"

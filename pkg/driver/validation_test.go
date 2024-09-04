@@ -25,7 +25,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/cloud"
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/cloud"
 )
 
 func randomString(n int) string {

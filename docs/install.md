@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-* Kubernetes Version >= 1.20 
+* Kubernetes Version >= 1.20
 
 * If you are using a self managed cluster, ensure the flag `--allow-privileged=true` for `kube-apiserver`.
 
@@ -35,9 +35,9 @@ Kubernetes metadata does not provide information about the number of ENIs or EBS
 
 ## Installation
 ### Set up driver permissions
-The driver requires IAM permissions to talk to Amazon EBS to manage the volume on user's behalf. [The example policy here](./example-iam-policy.json) defines these permissions. AWS maintains a managed policy, available at ARN `arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy`. 
+The driver requires IAM permissions to talk to Amazon EBS to manage the volume on user's behalf. [The example policy here](./example-iam-policy.json) defines these permissions. AWS maintains a managed policy, available at ARN `arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy`.
 
-Note: Add the below statement to the example policy if you want to encrypt the EBS drives. 
+Note: Add the below statement to the example policy if you want to encrypt the EBS drives.
 ```
 {
   "Effect": "Allow",
@@ -50,13 +50,13 @@ Note: Add the below statement to the example policy if you want to encrypt the E
 }
 ```
 
-For more information, review ["Creating the Amazon EBS CSI driver IAM role for service accounts" from the EKS User Guide.](https://docs.aws.amazon.com/eks/latest/userguide/csi-iam-role.html) 
+For more information, review ["Creating the Amazon EBS CSI driver IAM role for service accounts" from the EKS User Guide.](https://docs.aws.amazon.com/eks/latest/userguide/csi-iam-role.html)
 
 There are several methods to grant the driver IAM permissions:
 * Using IAM [instance profile](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html) - attach the policy to the instance profile IAM role and turn on access to [instance metadata](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html) for the instance(s) on which the driver Deployment will run
 * EKS only: Using [IAM roles for ServiceAccounts](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) - create an IAM role, attach the policy to it, then follow the IRSA documentation to associate the IAM role with the driver Deployment service account, which if you are installing via Helm is determined by value `controller.serviceAccount.name`, `ebs-csi-controller-sa` by default. If you are using k8s 1.24 or higher, the ServiceAccountToken is not mounted because the `LegacyServiceAccountTokenNoAutoGeneration` feature gate is enabled.
 Therefore, if you are using k8s 1.24 or higher, you need to set `true` to `controller.serviceAccount.autoMountServiceAccountToken`.
-* Using secret object - create an IAM user, attach the policy to it, then create a generic secret in the `kube-system` namespace with the user's credentials. The snippet below creates the generic secret named `aws-secret` that the driver accepts by default. You can customize the default secret and key names via the Helm parameters `awsAccessSecret.name`, `awsAccessSecret.keyId`, and `awsAccessSecret.accessKey` in the chart's [values.yaml](https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/charts/aws-ebs-csi-driver/values.yaml). 
+* Using secret object - create an IAM user, attach the policy to it, then create a generic secret in the `kube-system` namespace with the user's credentials. The snippet below creates the generic secret named `aws-secret` that the driver accepts by default. You can customize the default secret and key names via the Helm parameters `awsAccessSecret.name`, `awsAccessSecret.keyId`, and `awsAccessSecret.accessKey` in the chart's [values.yaml](https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/charts/aws-ebs-csi-driver/values.yaml).
 ```sh
 kubectl create secret generic aws-secret \
     --namespace kube-system \
@@ -77,7 +77,7 @@ You may deploy the EBS CSI driver via Kustomize, Helm, or as an [Amazon EKS mana
 
 #### Kustomize
 ```sh
-kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.34"
+kubectl apply -k "github.com/chu-yik/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.34"
 ```
 
 *Note: Using the master branch to deploy the driver is not supported as the master branch may contain upcoming features incompatible with the currently released stable version of the driver.*
@@ -202,5 +202,5 @@ helm uninstall aws-ebs-csi-driver --namespace kube-system
 **Kustomize**
 
 ```
-kubectl delete -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-<YOUR-CSI-DRIVER-VERION-NUMBER>"
+kubectl delete -k "github.com/chu-yik/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-<YOUR-CSI-DRIVER-VERION-NUMBER>"
 ```

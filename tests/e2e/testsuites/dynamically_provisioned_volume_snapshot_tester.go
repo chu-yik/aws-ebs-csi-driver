@@ -15,7 +15,7 @@ limitations under the License.
 package testsuites
 
 import (
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/tests/e2e/driver"
+	"github.com/chu-yik/aws-ebs-csi-driver/tests/e2e/driver"
 
 	volumesnapshotv1 "github.com/kubernetes-csi/external-snapshotter/client/v4/apis/volumesnapshot/v1"
 	v1 "k8s.io/api/core/v1"

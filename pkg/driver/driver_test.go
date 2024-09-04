@@ -17,10 +17,10 @@ package driver
 import (
 	"testing"
 
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/cloud"
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/cloud/metadata"
+	"github.com/chu-yik/aws-ebs-csi-driver/pkg/mounter"
 	"github.com/golang/mock/gomock"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/cloud"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/cloud/metadata"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/mounter"
 	"github.com/stretchr/testify/require"
 )
 

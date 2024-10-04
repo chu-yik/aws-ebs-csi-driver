@@ -24,6 +24,7 @@ import (
 const (
 	VolumeSnapshotClassKind = "VolumeSnapshotClass"
 	SnapshotAPIVersion      = "snapshot.storage.k8s.io/v1"
+	DriverName              = "ebs.csi.eks.aws"
 )
 
 type PVTestDriver interface {

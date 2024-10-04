@@ -46,7 +46,7 @@ const (
 )
 
 const (
-	DriverName               = "ebs.csi.aws.com"
+	DriverName               = "ebs.csi.eks.aws"
 	AwsPartitionKey          = "topology." + DriverName + "/partition"
 	AwsAccountIDKey          = "topology." + DriverName + "/account-id"
 	AwsRegionKey             = "topology." + DriverName + "/region"

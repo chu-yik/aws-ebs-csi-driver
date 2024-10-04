@@ -35,6 +35,7 @@ import (
 	"github.com/aws/smithy-go"
 	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/batcher"
 	dm "github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/cloud/devicemanager"
+	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/driver"
 	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/expiringcache"
 	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/util"
 	"k8s.io/apimachinery/pkg/util/wait"
@@ -128,7 +129,7 @@ const (
 	// AWSTagKeyPrefix is the prefix of the key value that is reserved for AWS.
 	AWSTagKeyPrefix = "aws:"
 	//AwsEbsDriverTagKey is the tag to identify if a volume/snapshot is managed by ebs csi driver
-	AwsEbsDriverTagKey = "ebs.csi.aws.com/cluster"
+	AwsEbsDriverTagKey = driver.DriverName + "/cluster"
 )
 
 // Batcher

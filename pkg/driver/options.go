@@ -32,6 +32,11 @@ type Options struct {
 	// If empty, the in-cluster config will be loaded.
 	Kubeconfig string
 
+	// ServiceLinkedRole is used for describe/delete as mentioned in https://quip-amazon.com/RtxJAub9BSlM/EKS-Tachyon-IAM-Technical-Approach
+	ServiceLinkedRoleArn string
+	// ClusterRole is used for create/mutate as mentioned in https://quip-amazon.com/RtxJAub9BSlM/EKS-Tachyon-IAM-Technical-Approach
+	ClusterRoleArn string
+
 	// #### Server options ####
 
 	//Endpoint is the endpoint for the CSI driver server
@@ -93,6 +98,8 @@ type Options struct {
 
 func (o *Options) AddFlags(f *flag.FlagSet) {
 	f.StringVar(&o.Kubeconfig, "kubeconfig", "", "Absolute path to a kubeconfig file. The default is the emtpy string, which causes the in-cluster config to be used")
+	f.StringVar(&o.ServiceLinkedRoleArn, "slr-arn", "", "Arn of the role to be used while interacting with EC2 describe/delete APIs.")
+	f.StringVar(&o.ClusterRoleArn, "cluster-role-arn", "", "Arn of the role to be used while interacting with EC2 create/mutate APIs.")
 
 	// Server options
 	f.StringVar(&o.Endpoint, "endpoint", DefaultCSIEndpoint, "Endpoint for the CSI driver server")

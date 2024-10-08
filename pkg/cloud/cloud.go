@@ -35,7 +35,6 @@ import (
 	"github.com/aws/smithy-go"
 	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/batcher"
 	dm "github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/cloud/devicemanager"
-	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/driver"
 	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/expiringcache"
 	"github.com/kubernetes-sigs/aws-ebs-csi-driver/pkg/util"
 	"k8s.io/apimachinery/pkg/util/wait"
@@ -129,7 +128,7 @@ const (
 	// AWSTagKeyPrefix is the prefix of the key value that is reserved for AWS.
 	AWSTagKeyPrefix = "aws:"
 	//AwsEbsDriverTagKey is the tag to identify if a volume/snapshot is managed by ebs csi driver
-	AwsEbsDriverTagKey = driver.DriverName + "/cluster"
+	AwsEbsDriverTagKey = "ebs.csi.eks.aws/cluster"
 )
 
 // Batcher
@@ -332,6 +331,32 @@ type cloud struct {
 }
 
 var _ Cloud = &cloud{}
+
+func NewCloudWithEC2(region string, ec2 EC2API, userAgentExtra string, batching bool) Cloud {
+	// Set the env var so that the session appends custom user agent string
+	if userAgentExtra != "" {
+		os.Setenv("AWS_EXECUTION_ENV", "aws-ebs-csi-driver-"+driverVersion+"-"+userAgentExtra)
+	} else {
+		os.Setenv("AWS_EXECUTION_ENV", "aws-ebs-csi-driver-"+driverVersion)
+	}
+
+	var bm *batcherManager
+	if batching {
+		klog.V(4).InfoS("NewCloudWithEC2: batching enabled")
+		bm = newBatcherManager(ec2)
+	}
+
+	return &cloud{
+		region:               region,
+		dm:                   dm.NewDeviceManager(),
+		ec2:                  ec2,
+		bm:                   bm,
+		rm:                   newRetryManager(),
+		vwp:                  vwp,
+		likelyBadDeviceNames: expiringcache.New[string, sync.Map](cacheForgetDelay),
+		latestClientTokens:   expiringcache.New[string, int](cacheForgetDelay),
+	}
+}
 
 // NewCloud returns a new instance of AWS cloud
 // It panics if session is invalid

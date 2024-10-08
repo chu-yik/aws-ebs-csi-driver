@@ -168,10 +168,22 @@ func main() {
 		region = md.GetRegion()
 	}
 
-	cloud, err := cloud.NewCloud(region, options.AwsSdkDebugLog, options.UserAgentExtra, options.Batching)
+	cloudSvc, err := cloud.NewCloud(region, options.AwsSdkDebugLog, options.UserAgentExtra, options.Batching)
 	if err != nil {
 		klog.ErrorS(err, "failed to create cloud service")
 		klog.FlushAndExit(klog.ExitFlushTimeout, 1)
+	}
+
+	// create split role EC2 and an cloud with EC2 injected if
+	if options.ServiceLinkedRoleArn != "" && options.ClusterRoleArn != "" {
+		roleForDescribeAndDelete := options.ServiceLinkedRoleArn
+		roleForCreateAndMutate := options.ClusterRoleArn
+		splitRoleEc2, err := cloud.NewEKSSplitRoleEC2API(region, roleForDescribeAndDelete, roleForCreateAndMutate, options.AwsSdkDebugLog)
+		if err != nil {
+			klog.ErrorS(err, "failed to create split role EC2")
+			klog.FlushAndExit(klog.ExitFlushTimeout, 1)
+		}
+		cloudSvc = cloud.NewCloudWithEC2(region, splitRoleEc2, options.UserAgentExtra, options.Batching)
 	}
 
 	m, err := mounter.NewNodeMounter(options.WindowsHostProcess)
@@ -185,7 +197,7 @@ func main() {
 		klog.V(2).InfoS("Failed to setup k8s client", "err", err)
 	}
 
-	drv, err := driver.NewDriver(cloud, &options, m, md, k8sClient)
+	drv, err := driver.NewDriver(cloudSvc, &options, m, md, k8sClient)
 	if err != nil {
 		klog.ErrorS(err, "failed to create driver")
 		klog.FlushAndExit(klog.ExitFlushTimeout, 1)

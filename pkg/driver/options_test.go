@@ -73,7 +73,12 @@ func TestAddFlags(t *testing.T) {
 	if err := f.Set("legacy-xfs", "true"); err != nil {
 		t.Errorf("error setting legacy-xfs: %v", err)
 	}
-
+	if err := f.Set("slr-arn", "arn:aws:iam::012345678910:aws-service-role/eks.amazonaws.com/AWSServiceRoleForAmazonEKS"); err != nil {
+		t.Errorf("error setting slr-arn: %v", err)
+	}
+	if err := f.Set("cluster-role-arn", "arn:aws:iam::012345678910:role/ClusterServiceRole"); err != nil {
+		t.Errorf("error setting cluster-role-arn: %v", err)
+	}
 	if o.Endpoint != "custom-endpoint" {
 		t.Errorf("unexpected Endpoint: got %s, want custom-endpoint", o.Endpoint)
 	}
@@ -112,6 +117,12 @@ func TestAddFlags(t *testing.T) {
 	}
 	if !o.LegacyXFSProgs {
 		t.Errorf("unexpected LegacyXFSProgs: got false, want true")
+	}
+	if o.ServiceLinkedRoleArn != "arn:aws:iam::012345678910:aws-service-role/eks.amazonaws.com/AWSServiceRoleForAmazonEKS" {
+		t.Errorf("unexpected slr-arn: got %s, want arn:aws:iam::012345678910:aws-service-role/eks.amazonaws.com/AWSServiceRoleForAmazonEKS", o.ServiceLinkedRoleArn)
+	}
+	if o.ClusterRoleArn != "arn:aws:iam::012345678910:role/ClusterServiceRole" {
+		t.Errorf("unexpected cluster-role-arn: got %s, want arn:aws:iam::012345678910:role/ClusterServiceRole", o.ClusterRoleArn)
 	}
 }
 
